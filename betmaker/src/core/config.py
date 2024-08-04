@@ -32,6 +32,7 @@ DATABASE_SETTINGS = {
 
     'echo': False,
 }
+ALEMBIC_DATABASE_URL = f'postgresql://{ENV.DB_USER}:{ENV.DB_PASSWORD}@{ENV.DB_HOST}:{ENV.DB_PORT}/{ENV.DB_NAME}'
 
 if '*' in ALLOWED_ORIGINS:
     log.warning('`ALLOWED_ORIGINS` contains *')

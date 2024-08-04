@@ -1,3 +1,4 @@
+
 from typing import Any
 
 from pydantic import BaseModel, ValidationError, model_validator
@@ -19,3 +20,7 @@ class PatchModel(BaseModel):
             cls._raise_on_empty_data(values)
 
         return values
+
+
+class SuccessResponse(BaseModel):
+    success: bool = True

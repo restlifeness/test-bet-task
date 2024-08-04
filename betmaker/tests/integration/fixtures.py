@@ -11,6 +11,7 @@ from main import app
 
 from src.database.models import BaseModel
 from src.modules.events.models import *
+from src.modules.bets.models import *
 
 from src.dependencies.session import get_session
 

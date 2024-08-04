@@ -1,10 +1,12 @@
 import uvicorn
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api import API_V1_ROUTER
+from src.modules.bets.exceptions import BetModuleException
 
 from src.core.config import ALLOWED_ORIGINS
 
@@ -30,6 +32,13 @@ app.add_middleware(
 
 
 app.include_router(API_V1_ROUTER)
+
+
+@app.exception_handler(BetModuleException)
+async def bet_module_exception_handler(_: Request, exc: BetModuleException):
+    return JSONResponse({
+        "details": str(exc),
+    }, status_code=400)
 
 
 def main() -> None:
