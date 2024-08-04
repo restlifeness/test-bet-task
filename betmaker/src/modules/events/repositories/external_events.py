@@ -4,6 +4,7 @@ from sqlalchemy.orm import selectinload
 from typing import Sequence
 
 from src.core.repositories import Repository
+from src.common.time import utc_now
 
 from src.modules.events.models import ExternalEvent
 from src.modules.events.enums import ExternalEventStatus
@@ -17,7 +18,10 @@ class ExternalEventsRepository(Repository[ExternalEvent]):
     ) -> Sequence[ExternalEvent]:
         query = (
             select(ExternalEvent)
-            .where(ExternalEvent.status == ExternalEventStatus.OPEN)
+            .where(
+                ExternalEvent.status == ExternalEventStatus.OPEN,
+                ExternalEvent.deadline > utc_now(),
+            )
             .offset(offset)
             .limit(limit)
         )
