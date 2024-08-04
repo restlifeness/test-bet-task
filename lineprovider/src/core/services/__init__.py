@@ -1,7 +1,6 @@
 
-from .base import AsyncSessionService, SimpleService
+from .base import AsyncSessionService
 
 __all__ = [
     'AsyncSessionService',
-    'SimpleService',
 ]

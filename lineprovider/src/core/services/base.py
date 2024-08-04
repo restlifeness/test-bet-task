@@ -1,19 +1,17 @@
-import typing
 
-from typing import Any
+from typing import Generic, TypeVar
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import BaseModel as BaseSchemaModel
+
+from src.database.models import BaseModel
+from src.core.repositories.generic import Repository
 
 
-if typing.TYPE_CHECKING:
-    from ..repositories.generic import Repository
+T = TypeVar('T', bound=BaseModel)
 
 
-class SimpleService:
-    pass
-
-
-class AsyncSessionService:
+class AsyncSessionService(Generic[T]):
     def __init__(self, session: AsyncSession) -> None:
         """
         Initialize session service.
@@ -26,25 +24,10 @@ class AsyncSessionService:
         self.session = session
         self.repo: Repository | None = None
 
-        self.post_init()
+        self.__post_init__()
 
-    def post_init(self) -> None:
+    def __post_init__(self) -> None:
         """
         Called after service initialization.
         """
         pass
-
-
-class CRUDService(AsyncSessionService):
-    def __init__(self, session: AsyncSession) -> None:
-        """
-        Initialize CRUD service.
-
-        :param session: async session
-        """
-        super().__init__(session)
-        raise NotImplementedError('Work in progress...')
-
-    """
-    WIP: add CRUD methods
-    """

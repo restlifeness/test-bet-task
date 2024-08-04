@@ -1,5 +1,5 @@
 
-from typing import Type, TypeVar, Generic, Sequence
+from typing import Type, TypeVar, Generic, Sequence, Any
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -75,7 +75,7 @@ class Repository(BaseRecordOrientedRepository, Generic[T]):
 
     async def update(self, record: T, with_commit: bool = True) -> T:
         """
-        Update record.
+        Update record with merge.
 
         :param record: record
         :param with_commit: commit after update
@@ -102,31 +102,6 @@ class Repository(BaseRecordOrientedRepository, Generic[T]):
 
         if with_commit:
             await self.session.commit()
-
-    async def filter_by(
-        self,
-        options: list | None = None,
-        use_list: bool = True,
-        order_by: list | None = None,
-        **kwargs,
-    ) -> T | Sequence[T]:
-        query = (
-            select(self.model)
-            .filter_by(**kwargs)
-        )
-
-        if options is not None:
-            query = query.options(*options)
-
-        if order_by is not None:
-            query = query.order_by(*order_by)
-
-        result = await self.session.execute(query)
-
-        if not use_list:
-            return result.scalars().first()
-
-        return result.scalars().all()
 
     async def save(self):
         await self.session.commit()
